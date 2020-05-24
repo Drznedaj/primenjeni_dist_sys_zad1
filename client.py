@@ -21,6 +21,7 @@ zk = KazooClient(hosts='127.0.0.1:2181')
 zk.add_listener(my_listener)
 
 zk.start()
+vote = None
 try:
     try:
         leader_node = '/leader'
@@ -50,11 +51,15 @@ try:
         @DataWatch(zk, leader_node)
         def my_func(data, stat, event):
             print("Data is %s" % data)
+            global vote
             if data == b'start':
                 print('Voting...')
                 random_vote = 'ya' if randint(0, 1) == 1 else 'no'
+                vote = random_vote
                 zk.create(votes_node+'/vote', value=random_vote.encode(), ephemeral=True, sequence=True)
-
+            elif data != None and vote != None:
+                result = 'won' if vote == data.decode() else 'lost'
+                print(f'{zk.client_id[0]}: My vote {result}!')
     sleep(100)
 except KeyboardInterrupt:
     pass
