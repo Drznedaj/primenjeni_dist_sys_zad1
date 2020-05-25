@@ -13,3 +13,4 @@ Koraci za pokretanje (iz konzole):
 
 Otvoriće se 4 prozora sa konzolama svakog od Zookeeper klijenata, 
 koji će izmedju sebe izabrati leadera i sačekati 100 sekundi pre izlaska.
+Mogu da se zatvore pre izlaska ili da se prekinu sa CTRL+C
